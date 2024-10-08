@@ -1,10 +1,8 @@
 
 name: Build and publish manually
 
-on:
- push:
-   branches: [main]
-   workflow_dispatch:
+on: 
+  workflow_dispatch:
     inputs:
       version:
         description: 'Image version'
@@ -17,7 +15,7 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v2
       - name: Build image
-        run: docker build -t digidocker .
+        run: docker build -t sample/my-page .
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -25,6 +23,6 @@ jobs:
       - name: Log in to DO Container Registry
         run: doctl registry login --expiry-seconds 600
       - name: Tag image
-        run: docker tag digidocker registry.digitalocean.com/sandyauth/my-digidocker:${{ github.event.inputs.version }}
+        run: docker tag sample/my-page registry.digitalocean.com/my-sample-registry/my-sample-page:${{ github.event.inputs.version }}
       - name: Push image to DO Container Registry
-        run: docker push registry.digitalocean.com/sandyauth/my-digidocker:${{ github.event.inputs.version }}
+        run: docker push registry.digitalocean.com/my-sample-registry/my-sample-page:${{ github.event.inputs.version }}
