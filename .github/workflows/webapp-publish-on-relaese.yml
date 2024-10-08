@@ -1,27 +1,17 @@
-name: Build and publish manually
+name: Update App
 
-on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Image version'
-        required: true
+on:
+ push:
+   branches: [main]
 
 jobs:
-  build_and_push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v2
-      - name: Build image
-        run: docker build -t digidocker .
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Log in to DO Container Registry
-        run: doctl registry login --expiry-seconds 600
-      - name: Tag image
-        run: docker tag digidocker registry.digitalocean.com/sandyauth/digidocker:${{ github.event.inputs.version }}
-      - name: Push image to DO Container Registry
-        run: docker push registry.digitalocean.com/sandyauth/digidocker:${{ github.event.inputs.version }}
+ deploy-app:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout repository
+       uses: actions/checkout@v4
+     - name: Deploy the app
+       uses: digitalocean/app_action/deploy@v2
+       with:
+         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} 
+         
