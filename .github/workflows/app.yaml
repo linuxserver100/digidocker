@@ -1,7 +1,9 @@
 
 name: Build and publish manually
 
-on: 
+on:
+ push:
+   branches: [main]
   workflow_dispatch:
     inputs:
       version:
