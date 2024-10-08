@@ -1,4 +1,4 @@
-name: Build and publish manually this
+name: Build and publish manually
 
 on: 
   workflow_dispatch:
